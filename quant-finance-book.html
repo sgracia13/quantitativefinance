@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Quantitative Finance Book</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #151a21;
+            --bg-sidebar: #0d1117;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent: #58a6ff;
+            --accent-hover: #79b8ff;
+            --border: #21262d;
+            --code-bg: #161b22;
+            --sidebar-width: 300px;
+            --content-max-width: 800px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 0;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-sidebar);
+            z-index: 10;
+        }
+
+        .sidebar-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            letter-spacing: -0.02em;
+            cursor: pointer;
+        }
+
+        .sidebar-title:hover {
+            color: var(--accent);
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar-nav {
+            padding: 16px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 8px;
+        }
+
+        .nav-section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 12px 20px 8px;
+        }
+
+        .nav-chapter {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 6px 20px;
+            transition: all 0.15s ease;
+            border-left: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-chapter:hover {
+            color: var(--text-primary);
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        .nav-chapter.active {
+            color: var(--accent);
+            border-left-color: var(--accent);
+            background: rgba(88, 166, 255, 0.08);
+        }
+
+        .nav-chapter .chapter-number {
+            color: var(--text-muted);
+            margin-right: 8px;
+            font-weight: 500;
+            min-width: 24px;
+            display: inline-block;
+        }
+
+        .nav-subchapter {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 4px 20px 4px 48px;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .nav-subchapter:hover {
+            color: var(--text-secondary);
+        }
+
+        .nav-subchapter.active {
+            color: var(--accent);
+        }
+
+        /* Main content */
+        .main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 48px 64px;
+            max-width: calc(var(--content-max-width) + 128px);
+        }
+
+        .content {
+            max-width: var(--content-max-width);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 48px 0 16px;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        h2:first-of-type {
+            margin-top: 32px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 32px 0 12px;
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 24px;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Code blocks */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            overflow-x: auto;
+            margin: 24px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Navigation buttons */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 32px 64px;
+            border-top: 1px solid var(--border);
+            max-width: calc(var(--content-max-width) + 128px);
+        }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            min-width: 200px;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            border-color: var(--accent);
+            background: rgba(88, 166, 255, 0.05);
+            text-decoration: none;
+        }
+
+        .nav-button.prev {
+            align-items: flex-start;
+        }
+
+        .nav-button.next {
+            align-items: flex-end;
+        }
+
+        .nav-button.hidden {
+            visibility: hidden;
+        }
+
+        .nav-button-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .nav-button-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        /* Callout boxes */
+        .callout {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .callout.warning {
+            border-left-color: #f0883e;
+        }
+
+        .callout.tip {
+            border-left-color: #3fb950;
+        }
+
+        .callout-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .callout.warning .callout-title {
+            color: #f0883e;
+        }
+
+        .callout.tip .callout-title {
+            color: #3fb950;
+        }
+
+        .callout p {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        /* Math blocks */
+        .math-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        /* Chapter header */
+        .chapter-header {
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .page-nav {
+                padding: 24px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-button {
+                min-width: auto;
+            }
+
+            .nav-button.hidden {
+                display: none;
+            }
+
+            .content-wrapper {
+                padding: 32px 24px;
+            }
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 200;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Overlay for mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 50;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle">☰ Menu</button>
+    <div class="overlay" id="overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a class="sidebar-title" data-page="intro">The Quantitative Finance Book</a>
+            <div class="sidebar-subtitle">From Foundations to Practice</div>
+        </div>
+        
+        <nav class="sidebar-nav" id="sidebarNav">
+            <!-- Navigation will be generated by JavaScript -->
+        </nav>
+    </aside>
+
+    <main class="main">
+        <div class="content-wrapper">
+            <div class="content" id="content">
+                <!-- Content will be generated by JavaScript -->
+            </div>
+        </div>
+        
+        <nav class="page-nav">
+            <div class="nav-button prev" id="prevBtn">
+                <span class="nav-button-label">Previous</span>
+                <span class="nav-button-title" id="prevTitle">← Previous</span>
+            </div>
+            <div class="nav-button next" id="nextBtn">
+                <span class="nav-button-label">Next</span>
+                <span class="nav-button-title" id="nextTitle">Next →</span>
+            </div>
+        </nav>
+    </main>
+
+    <script>
+        // ============================================================
+        // BOOK STRUCTURE - EDIT THIS TO CUSTOMIZE YOUR BOOK
+        // ============================================================
+        const bookStructure = {
+            title: "The Quantitative Finance Book",
+            subtitle: "From Foundations to Practice",
+            
+            pages: [
+                {
+                    id: "intro",
+                    title: "Introduction",
+                    chapter: null,
+                    content: `
+                        <h1>The Quantitative Finance Book</h1>
+                        <p>Welcome to <em>The Quantitative Finance Book</em>, an introductory text on quantitative methods in finance. This book will guide you from foundational concepts through to practical applications.</p>
+                        
+                        <div class="callout">
+                            <div class="callout-title">Note</div>
+                            <p>This book assumes familiarity with basic calculus and statistics. Programming examples use Python.</p>
+                        </div>
+                        
+                        <h2>Who This Book Is For</h2>
+                        <p>This book is designed for aspiring quantitative analysts, finance professionals looking to deepen their technical skills, and students studying computational finance.</p>
+                        
+                        <h2>How to Use This Book</h2>
+                        <p>Work through the chapters sequentially, as concepts build upon each other. Each chapter includes code examples and exercises.</p>
+                    `
+                },
+                
+                // ==================== PART I ====================
+                {
+                    id: "1",
+                    title: "Chapter Title",
+                    chapter: "1",
+                    part: "Part I: Section Title",
+                    content: `
+                        <div class="chapter-header">Chapter 1</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter introduction and overview goes here.</p>
+                        
+                        <h2>Section Heading</h2>
+                        <p>Section content goes here.</p>
+                    `
+                },
+                {
+                    id: "1.1",
+                    title: "Subsection",
+                    chapter: "1.1",
+                    content: `
+                        <div class="chapter-header">Chapter 1.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "1.2",
+                    title: "Subsection",
+                    chapter: "1.2",
+                    content: `
+                        <div class="chapter-header">Chapter 1.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "1.3",
+                    title: "Subsection",
+                    chapter: "1.3",
+                    content: `
+                        <div class="chapter-header">Chapter 1.3</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "2",
+                    title: "Chapter Title",
+                    chapter: "2",
+                    content: `
+                        <div class="chapter-header">Chapter 2</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "2.1",
+                    title: "Subsection",
+                    chapter: "2.1",
+                    content: `
+                        <div class="chapter-header">Chapter 2.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "2.2",
+                    title: "Subsection",
+                    chapter: "2.2",
+                    content: `
+                        <div class="chapter-header">Chapter 2.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "3",
+                    title: "Chapter Title",
+                    chapter: "3",
+                    content: `
+                        <div class="chapter-header">Chapter 3</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "3.1",
+                    title: "Subsection",
+                    chapter: "3.1",
+                    content: `
+                        <div class="chapter-header">Chapter 3.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "3.2",
+                    title: "Subsection",
+                    chapter: "3.2",
+                    content: `
+                        <div class="chapter-header">Chapter 3.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "3.3",
+                    title: "Subsection",
+                    chapter: "3.3",
+                    content: `
+                        <div class="chapter-header">Chapter 3.3</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                
+                // ==================== PART II ====================
+                {
+                    id: "4",
+                    title: "Chapter Title",
+                    chapter: "4",
+                    part: "Part II: Section Title",
+                    content: `
+                        <div class="chapter-header">Chapter 4</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "4.1",
+                    title: "Subsection",
+                    chapter: "4.1",
+                    content: `
+                        <div class="chapter-header">Chapter 4.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "4.2",
+                    title: "Subsection",
+                    chapter: "4.2",
+                    content: `
+                        <div class="chapter-header">Chapter 4.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "5",
+                    title: "Chapter Title",
+                    chapter: "5",
+                    content: `
+                        <div class="chapter-header">Chapter 5</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "5.1",
+                    title: "Subsection",
+                    chapter: "5.1",
+                    content: `
+                        <div class="chapter-header">Chapter 5.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "5.2",
+                    title: "Subsection",
+                    chapter: "5.2",
+                    content: `
+                        <div class="chapter-header">Chapter 5.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "5.3",
+                    title: "Subsection",
+                    chapter: "5.3",
+                    content: `
+                        <div class="chapter-header">Chapter 5.3</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "6",
+                    title: "Chapter Title",
+                    chapter: "6",
+                    content: `
+                        <div class="chapter-header">Chapter 6</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "6.1",
+                    title: "Subsection",
+                    chapter: "6.1",
+                    content: `
+                        <div class="chapter-header">Chapter 6.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "6.2",
+                    title: "Subsection",
+                    chapter: "6.2",
+                    content: `
+                        <div class="chapter-header">Chapter 6.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                
+                // ==================== PART III ====================
+                {
+                    id: "7",
+                    title: "Chapter Title",
+                    chapter: "7",
+                    part: "Part III: Section Title",
+                    content: `
+                        <div class="chapter-header">Chapter 7</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "7.1",
+                    title: "Subsection",
+                    chapter: "7.1",
+                    content: `
+                        <div class="chapter-header">Chapter 7.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "7.2",
+                    title: "Subsection",
+                    chapter: "7.2",
+                    content: `
+                        <div class="chapter-header">Chapter 7.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "8",
+                    title: "Chapter Title",
+                    chapter: "8",
+                    content: `
+                        <div class="chapter-header">Chapter 8</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "8.1",
+                    title: "Subsection",
+                    chapter: "8.1",
+                    content: `
+                        <div class="chapter-header">Chapter 8.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "8.2",
+                    title: "Subsection",
+                    chapter: "8.2",
+                    content: `
+                        <div class="chapter-header">Chapter 8.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "8.3",
+                    title: "Subsection",
+                    chapter: "8.3",
+                    content: `
+                        <div class="chapter-header">Chapter 8.3</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "9",
+                    title: "Chapter Title",
+                    chapter: "9",
+                    content: `
+                        <div class="chapter-header">Chapter 9</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "9.1",
+                    title: "Subsection",
+                    chapter: "9.1",
+                    content: `
+                        <div class="chapter-header">Chapter 9.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "9.2",
+                    title: "Subsection",
+                    chapter: "9.2",
+                    content: `
+                        <div class="chapter-header">Chapter 9.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                
+                // ==================== PART IV ====================
+                {
+                    id: "10",
+                    title: "Chapter Title",
+                    chapter: "10",
+                    part: "Part IV: Section Title",
+                    content: `
+                        <div class="chapter-header">Chapter 10</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "10.1",
+                    title: "Subsection",
+                    chapter: "10.1",
+                    content: `
+                        <div class="chapter-header">Chapter 10.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "10.2",
+                    title: "Subsection",
+                    chapter: "10.2",
+                    content: `
+                        <div class="chapter-header">Chapter 10.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "11",
+                    title: "Chapter Title",
+                    chapter: "11",
+                    content: `
+                        <div class="chapter-header">Chapter 11</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "11.1",
+                    title: "Subsection",
+                    chapter: "11.1",
+                    content: `
+                        <div class="chapter-header">Chapter 11.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "11.2",
+                    title: "Subsection",
+                    chapter: "11.2",
+                    content: `
+                        <div class="chapter-header">Chapter 11.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "12",
+                    title: "Chapter Title",
+                    chapter: "12",
+                    content: `
+                        <div class="chapter-header">Chapter 12</div>
+                        <h1>Chapter Title</h1>
+                        <p>Chapter content goes here.</p>
+                    `
+                },
+                {
+                    id: "12.1",
+                    title: "Subsection",
+                    chapter: "12.1",
+                    content: `
+                        <div class="chapter-header">Chapter 12.1</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                {
+                    id: "12.2",
+                    title: "Subsection",
+                    chapter: "12.2",
+                    content: `
+                        <div class="chapter-header">Chapter 12.2</div>
+                        <h1>Subsection</h1>
+                        <p>Subsection content goes here.</p>
+                    `
+                },
+                
+                // ==================== APPENDICES ====================
+                {
+                    id: "A",
+                    title: "Appendix Title",
+                    chapter: "A",
+                    part: "Appendices",
+                    content: `
+                        <div class="chapter-header">Appendix A</div>
+                        <h1>Appendix Title</h1>
+                        <p>Appendix content goes here.</p>
+                    `
+                },
+                {
+                    id: "B",
+                    title: "Appendix Title",
+                    chapter: "B",
+                    content: `
+                        <div class="chapter-header">Appendix B</div>
+                        <h1>Appendix Title</h1>
+                        <p>Appendix content goes here.</p>
+                    `
+                },
+                {
+                    id: "C",
+                    title: "Appendix Title",
+                    chapter: "C",
+                    content: `
+                        <div class="chapter-header">Appendix C</div>
+                        <h1>Appendix Title</h1>
+                        <p>Appendix content goes here.</p>
+                    `
+                }
+            ]
+        };
+
+        // ============================================================
+        // NAVIGATION ENGINE - NO NEED TO EDIT BELOW
+        // ============================================================
+        
+        let currentPageIndex = 0;
+
+        function isSubchapter(chapter) {
+            return chapter && chapter.includes('.');
+        }
+
+        function buildNavigation() {
+            const nav = document.getElementById('sidebarNav');
+            let html = '';
+            let currentPart = null;
+
+            bookStructure.pages.forEach((page, index) => {
+                // Check if this starts a new part
+                if (page.part && page.part !== currentPart) {
+                    if (currentPart !== null) {
+                        html += '</div>'; // Close previous section
+                    }
+                    currentPart = page.part;
+                    html += `<div class="nav-section"><div class="nav-section-title">${page.part}</div>`;
+                }
+
+                // Render intro page differently
+                if (page.id === 'intro') {
+                    html += `<div class="nav-section">
+                        <a class="nav-chapter" data-page="${page.id}">${page.title}</a>
+                    </div>`;
+                } else if (isSubchapter(page.chapter)) {
+                    // Subchapter
+                    html += `<a class="nav-subchapter" data-page="${page.id}">${page.chapter}. ${page.title}</a>`;
+                } else {
+                    // Main chapter
+                    html += `<a class="nav-chapter" data-page="${page.id}">
+                        <span class="chapter-number">${page.chapter}.</span>${page.title}
+                    </a>`;
+                }
+            });
+
+            // Close last section
+            if (currentPart !== null) {
+                html += '</div>';
+            }
+
+            nav.innerHTML = html;
+
+            // Add click handlers
+            nav.querySelectorAll('[data-page]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    navigateTo(e.target.closest('[data-page]').dataset.page);
+                });
+            });
+        }
+
+        function navigateTo(pageId) {
+            const index = bookStructure.pages.findIndex(p => p.id === pageId);
+            if (index !== -1) {
+                currentPageIndex = index;
+                renderPage();
+                updateURL();
+                closeMobileMenu();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function renderPage() {
+            const page = bookStructure.pages[currentPageIndex];
+            
+            // Update content
+            document.getElementById('content').innerHTML = page.content;
+            
+            // Update document title
+            document.title = page.title + ' - ' + bookStructure.title;
+            
+            // Update active states in sidebar
+            document.querySelectorAll('.nav-chapter, .nav-subchapter').forEach(el => {
+                el.classList.remove('active');
+                if (el.dataset.page === page.id) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Update prev/next buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevTitle = document.getElementById('prevTitle');
+            const nextTitle = document.getElementById('nextTitle');
+
+            if (currentPageIndex > 0) {
+                const prevPage = bookStructure.pages[currentPageIndex - 1];
+                prevBtn.classList.remove('hidden');
+                prevTitle.textContent = '← ' + (prevPage.chapter ? prevPage.chapter + '. ' : '') + prevPage.title;
+            } else {
+                prevBtn.classList.add('hidden');
+            }
+
+            if (currentPageIndex < bookStructure.pages.length - 1) {
+                const nextPage = bookStructure.pages[currentPageIndex + 1];
+                nextBtn.classList.remove('hidden');
+                nextTitle.textContent = (nextPage.chapter ? nextPage.chapter + '. ' : '') + nextPage.title + ' →';
+            } else {
+                nextBtn.classList.add('hidden');
+            }
+        }
+
+        function updateURL() {
+            const page = bookStructure.pages[currentPageIndex];
+            history.pushState({ pageId: page.id }, '', '#' + page.id);
+        }
+
+        function handleURLChange() {
+            const hash = window.location.hash.slice(1);
+            if (hash) {
+                navigateTo(hash);
+            } else {
+                navigateTo('intro');
+            }
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            buildNavigation();
+            handleURLChange();
+
+            // Navigation button handlers
+            document.getElementById('prevBtn').addEventListener('click', () => {
+                if (currentPageIndex > 0) {
+                    navigateTo(bookStructure.pages[currentPageIndex - 1].id);
+                }
+            });
+
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                if (currentPageIndex < bookStructure.pages.length - 1) {
+                    navigateTo(bookStructure.pages[currentPageIndex + 1].id);
+                }
+            });
+
+            // Title click handler
+            document.querySelector('.sidebar-title').addEventListener('click', () => {
+                navigateTo('intro');
+            });
+
+            // Mobile menu
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+                document.getElementById('overlay').classList.toggle('active');
+            });
+
+            document.getElementById('overlay').addEventListener('click', closeMobileMenu);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft' && currentPageIndex > 0) {
+                    navigateTo(bookStructure.pages[currentPageIndex - 1].id);
+                } else if (e.key === 'ArrowRight' && currentPageIndex < bookStructure.pages.length - 1) {
+                    navigateTo(bookStructure.pages[currentPageIndex + 1].id);
+                }
+            });
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', handleURLChange);
+    </script>
+</body>
+</html>
