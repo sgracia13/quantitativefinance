@@ -2,6 +2,7 @@
 
 A single-file HTML book template. Dark theme, sidebar navigation, mobile responsive.
 
+![image] (images/image.png)
 ## Quick Start
 
 1. Open `quant-finance-book.html` in a browser
